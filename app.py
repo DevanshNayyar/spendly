@@ -1,7 +1,19 @@
+from datetime import datetime
+
 from flask import Flask, render_template, request, redirect, url_for, session
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from database.db import get_db, init_db, seed_db, create_user, get_user_by_email
+from database.db import (
+    get_db,
+    init_db,
+    seed_db,
+    create_user,
+    get_user_by_email,
+    get_user_by_id,
+    get_expense_summary,
+    get_recent_expenses,
+    get_category_breakdown,
+)
 
 app = Flask(__name__)
 app.secret_key = "spendly-dev-secret-change-in-production"  # dev-only, not for production
@@ -59,7 +71,7 @@ def login():
         return render_template("login.html", error="Invalid email or password")
 
     session["user_id"] = user["id"]
-    return redirect(url_for("landing"))
+    return redirect(url_for("profile"))
 
 
 @app.route("/terms")
@@ -84,7 +96,56 @@ def logout():
 
 @app.route("/profile")
 def profile():
-    return "Profile page — coming in Step 4"
+    user_id = session.get("user_id")
+    if not user_id:
+        return redirect(url_for("login"))
+
+    user_row = get_user_by_id(user_id)
+    summary_row = get_expense_summary(user_id)
+    recent_rows = get_recent_expenses(user_id, limit=8)
+    breakdown_rows = get_category_breakdown(user_id)
+
+    initials = "".join(part[0] for part in user_row["name"].split()[:2]).upper()
+
+    user = {
+        "name": user_row["name"],
+        "email": user_row["email"],
+        "initials": initials,
+        "member_since": datetime.strptime(
+            user_row["created_at"], "%Y-%m-%d %H:%M:%S"
+        ).strftime("%d %b %Y"),
+    }
+
+    recent_expenses = [
+        {
+            "date": datetime.strptime(row["date"], "%Y-%m-%d").strftime("%d %b %Y"),
+            "category": row["category"],
+            "amount": row["amount"],
+            "description": row["description"],
+        }
+        for row in recent_rows
+    ]
+
+    top_category = breakdown_rows[0]["category"] if breakdown_rows else "—"
+    max_category_total = breakdown_rows[0]["total"] if breakdown_rows else 0
+    category_breakdown = [
+        {
+            "category": row["category"],
+            "total": row["total"],
+            "percent": round((row["total"] / max_category_total) * 100) if max_category_total else 0,
+        }
+        for row in breakdown_rows
+    ]
+
+    return render_template(
+        "profile.html",
+        user=user,
+        expense_count=summary_row["count"],
+        total_spent=summary_row["total"],
+        recent_expenses=recent_expenses,
+        top_category=top_category,
+        category_breakdown=category_breakdown,
+    )
 
 
 @app.route("/expenses/add")

@@ -1,0 +1,230 @@
+/* ------------------------------------------------------------------ */
+/* Profile layout                                                      */
+/* ------------------------------------------------------------------ */
+
+.profile-section {
+    padding: 3rem 2rem 4rem;
+}
+
+.profile-container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* Header card                                                         */
+/* ------------------------------------------------------------------ */
+
+.profile-header-card {
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.profile-avatar {
+    flex-shrink: 0;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--paper-card);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 1.2rem;
+    letter-spacing: 0.02em;
+}
+
+.profile-title {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    color: var(--ink);
+    margin-bottom: 0.2rem;
+}
+
+.profile-subtitle {
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+    margin-bottom: 0.2rem;
+}
+
+.profile-meta {
+    font-size: 0.85rem;
+    color: var(--ink-muted);
+}
+
+/* ------------------------------------------------------------------ */
+/* Summary stats                                                       */
+/* ------------------------------------------------------------------ */
+
+.profile-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.stat-value-category {
+    font-family: var(--font-display);
+    font-weight: 400;
+}
+
+/* ------------------------------------------------------------------ */
+/* Two-column panels                                                   */
+/* ------------------------------------------------------------------ */
+
+.profile-columns {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 1.5rem;
+    align-items: start;
+}
+
+@media (max-width: 860px) {
+    .profile-columns {
+        grid-template-columns: 1fr;
+    }
+}
+
+.profile-panel {
+    background: var(--paper-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.5rem;
+}
+
+.profile-panel-title {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    color: var(--ink);
+    margin-bottom: 1rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* Recent transactions table                                           */
+/* ------------------------------------------------------------------ */
+
+.tx-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tx-table th {
+    text-align: left;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    padding: 0 0.5rem 0.6rem;
+    border-bottom: 1px solid var(--border-soft);
+}
+
+.tx-table td {
+    padding: 0.85rem 0.5rem;
+    border-bottom: 1px solid var(--border-soft);
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+}
+
+.tx-table tr:last-child td {
+    border-bottom: none;
+}
+
+.tx-amount-col {
+    text-align: right;
+    font-weight: 600;
+    color: var(--ink);
+}
+
+.tx-table th.tx-amount-col {
+    text-align: right;
+    font-weight: 600;
+}
+
+/* ------------------------------------------------------------------ */
+/* Category pills                                                      */
+/* ------------------------------------------------------------------ */
+
+.category-pill {
+    display: inline-block;
+    padding: 0.2rem 0.65rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.category-food { background: var(--accent-light); color: var(--accent); }
+.category-transport { background: var(--accent-2-light); color: var(--accent-2); }
+.category-bills { background: var(--cat-blue-light); color: var(--cat-blue); }
+.category-health { background: var(--danger-light); color: var(--danger); }
+.category-entertainment { background: var(--cat-violet-light); color: var(--cat-violet); }
+.category-shopping { background: var(--cat-gold-light); color: var(--cat-gold); }
+.category-other { background: var(--border-soft); color: var(--ink-muted); }
+
+/* ------------------------------------------------------------------ */
+/* By category breakdown                                               */
+/* ------------------------------------------------------------------ */
+
+.category-breakdown {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+}
+
+.category-row-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.4rem;
+}
+
+.category-row-label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--ink-soft);
+}
+
+.category-row-amount {
+    font-size: 0.85rem;
+    color: var(--ink-muted);
+}
+
+.category-bar-track {
+    height: 8px;
+    background: var(--border-soft);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.category-bar-fill {
+    height: 100%;
+    border-radius: 999px;
+}
+
+.category-bar-fill.category-food { background: var(--accent); }
+.category-bar-fill.category-transport { background: var(--accent-2); }
+.category-bar-fill.category-bills { background: var(--cat-blue); }
+.category-bar-fill.category-health { background: var(--danger); }
+.category-bar-fill.category-entertainment { background: var(--cat-violet); }
+.category-bar-fill.category-shopping { background: var(--cat-gold); }
+.category-bar-fill.category-other { background: var(--ink-faint); }
+
+/* ------------------------------------------------------------------ */
+/* Empty state                                                         */
+/* ------------------------------------------------------------------ */
+
+.empty-state {
+    text-align: center;
+    color: var(--ink-muted);
+    font-size: 0.9rem;
+    padding: 1.5rem 0;
+}
