@@ -95,3 +95,57 @@ def create_user(name, email, password_hash):
     user_id = cur.lastrowid
     conn.close()
     return user_id
+
+
+def get_user_by_id(user_id):
+    conn = get_db()
+    user = conn.execute(
+        "SELECT * FROM users WHERE id = ?", (user_id,)
+    ).fetchone()
+    conn.close()
+    return user
+
+
+def get_expense_summary(user_id):
+    conn = get_db()
+    summary = conn.execute(
+        """
+        SELECT COUNT(*) AS count, COALESCE(SUM(amount), 0) AS total
+        FROM expenses
+        WHERE user_id = ?
+        """,
+        (user_id,),
+    ).fetchone()
+    conn.close()
+    return summary
+
+
+def get_recent_expenses(user_id, limit=5):
+    conn = get_db()
+    expenses = conn.execute(
+        """
+        SELECT * FROM expenses
+        WHERE user_id = ?
+        ORDER BY date DESC, id DESC
+        LIMIT ?
+        """,
+        (user_id, limit),
+    ).fetchall()
+    conn.close()
+    return expenses
+
+
+def get_category_breakdown(user_id):
+    conn = get_db()
+    breakdown = conn.execute(
+        """
+        SELECT category, SUM(amount) AS total
+        FROM expenses
+        WHERE user_id = ?
+        GROUP BY category
+        ORDER BY total DESC
+        """,
+        (user_id,),
+    ).fetchall()
+    conn.close()
+    return breakdown
